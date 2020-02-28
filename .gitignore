@@ -1,0 +1,10 @@
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+
+### VIEW ###
+node_modules
+README.md
+package-lock.json
