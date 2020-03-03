@@ -1,10 +1,10 @@
-### IntelliJ IDEA ###
-.idea/
-*.iws
+# Created by .ignore support plugin (hsz.mobi)
+.idea/*
 *.iml
 *.ipr
+*.iws
 
-### VIEW ###
-node_modules
-README.md
+
+
+node_modules/
 package-lock.json
