@@ -1,20 +1,29 @@
 const User = require('../models/user.model');
+const bcrypt = require('bcrypt');
 
-exports.user_login = function(req, res) {
-    User.findOne({login: req.body.login}).then((user) => {
-        req.session.user = user;
-        console.log('GET USER: ', req.session.user);
-        res.send('saved', req.session.user)
+exports.user_login = function(request, response) {
+
+
+    User.findOne({login: request.body.login}).then(user => {
+        console.log('GET USER: ', request.headers.cookie);
+        console.log('GENERATED_ID: ', request.cookies);
+
+        if (user) {
+            bcrypt.compare(request.body.password, user.password, function (err, isPasswordValid) {
+                request.session.user = user;
+                isPasswordValid ? response.status(201).json({user : user.login, session : request.sessionID}) : '';
+
+        })
+
+        }else {
+            console.log('not found')
+        }
     })
-
-
 };
 
 
 exports.start = function(req, res) {
-    console.log('GET!!!!!!: ', req.sessionID);
-    console.log('USER: ', req.session.userID);
-    res.send(req.session.userID)
+    res.json({session : req.session})
 };
 
 exports.user_get = function (req, res) {
@@ -22,9 +31,10 @@ exports.user_get = function (req, res) {
     console.log('My session', req.sessionID);
     User.findById(req.params.id, function (err, user) {
         if (!err) {
-            res.send(req.session)
+            res.send(req.session);
+            console.log(req.session)
         } else {
-            console.log(err)
+            console.log('ERROR')
         }
     })
 };
